@@ -14,22 +14,27 @@
 <div id="site-header"></div>
 
 <section class="hero">
+  <div class="hero-ambient">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="scanline"></div>
+  </div>
   <div class="container hero-grid">
     <div>
-      <span class="eyebrow">Фитнес центар · Прилеп</span>
-      <h1>ГРАДИ ГО<br><span class="accent">СВОЈОТ АРЕНА.</span></h1>
-      <p class="lead">Тегови, кардио, групни тренинзи и простор направен да те турка понатаму секој ден. Arena Fitness Prilep е местото каде почетниците стануваат редовни, а редовните стануваат посветени.</p>
-      <div class="hero-cta">
-        <a href="contact.html" class="btn btn-primary">Закажи пробен термин</a>
-        <a href="plans.html" class="btn btn-outline">Види ценовник</a>
+      <span class="eyebrow hero-fade" data-i18n="hero.eyebrow">Фитнес центар · Прилеп</span>
+      <h1 class="hero-fade d2"><span data-i18n="hero.title1">ГРАДИ ГО</span><br><span class="accent" data-i18n="hero.title2">СВОЈОТ АРЕНА.</span></h1>
+      <p class="lead hero-fade d3" data-i18n="hero.lead">Тегови, кардио, групни тренинзи и простор направен да те турка понатаму секој ден. Arena Fitness Prilep е местото каде почетниците стануваат редовни, а редовните стануваат посветени.</p>
+      <div class="hero-cta hero-fade d3">
+        <a href="contact.html" class="btn btn-primary" data-i18n="hero.ctaPrimary">Закажи пробен термин</a>
+        <a href="plans.html" class="btn btn-outline" data-i18n="hero.ctaSecondary">Види ценовник</a>
       </div>
-      <div class="hero-stats">
-        <div class="stat"><b>09–22</b><span>Пон–Пет работно време</span></div>
-        <div class="stat"><b>6</b><span>Пакети за членство</span></div>
-        <div class="stat"><b>15+</b><span>Групни термини неделно</span></div>
+      <div class="hero-stats hero-fade d4">
+        <div class="stat"><b data-i18n="hero.stat1Value">09–22</b><span data-i18n="hero.stat1Label">Пон–Пет работно време</span></div>
+        <div class="stat"><b data-i18n="hero.stat2Value">6</b><span data-i18n="hero.stat2Label">Пакети за членство</span></div>
+        <div class="stat"><b data-i18n="hero.stat3Value">15+</b><span data-i18n="hero.stat3Label">Групни термини неделно</span></div>
       </div>
     </div>
-    <div class="hero-visual">
+    <div class="hero-visual hero-fade d2">
       <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
@@ -68,40 +73,41 @@
         </g>
         <text x="30" y="450" font-family="Bebas Neue" font-size="34" fill="#f3f6ec" opacity="0.9">NO EXCUSES</text>
       </svg>
-      <span class="badge-pill">Отвораме секој ден · Пон–Саб</span>
+      <span class="badge-pill" data-i18n="hero.badge">Отвораме секој ден · Пон–Саб</span>
     </div>
   </div>
+  <div class="scroll-cue"><span data-i18n="hero.scrollCue">Скролувај</span><span class="arrow"></span></div>
 </section>
 
 <section>
   <div class="container">
     <div class="section-head">
       <div>
-        <span class="eyebrow">Зошто Arena</span>
-        <h2 class="section-title">Сè што ти треба, на едно место.</h2>
+        <span class="eyebrow" data-i18n="features.eyebrow">Зошто Arena</span>
+        <h2 class="section-title" data-i18n="features.title">Сè што ти треба, на едно место.</h2>
       </div>
-      <p>Од првиот ден до личниот рекорд — опрема, простор и програми за секое ниво.</p>
+      <p data-i18n="features.subtitle">Од првиот ден до личниот рекорд — опрема, простор и програми за секое ниво.</p>
     </div>
     <div class="grid-4">
       <div class="feature-card">
         <div class="icon">🏋️</div>
-        <h3>Целосна сала</h3>
-        <p>Слободни тегови, машини и кардио зона за секој тип на тренинг.</p>
+        <h3 data-i18n="features.f1Title">Целосна сала</h3>
+        <p data-i18n="features.f1Body">Слободни тегови, машини и кардио зона за секој тип на тренинг.</p>
       </div>
       <div class="feature-card">
         <div class="icon">👥</div>
-        <h3>Групни тренинзи</h3>
-        <p>Функционален тренинг, HIIT, зумба, јога, спининг и пилатес — секоја недела.</p>
+        <h3 data-i18n="features.f2Title">Групни тренинзи</h3>
+        <p data-i18n="features.f2Body">Функционален тренинг, HIIT, зумба, јога, спининг и пилатес — секоја недела.</p>
       </div>
       <div class="feature-card">
         <div class="icon">🕒</div>
-        <h3>Долго работно време</h3>
-        <p>Отворено секој ден освен недела, до доцна навечер во текот на седмицата.</p>
+        <h3 data-i18n="features.f3Title">Долго работно време</h3>
+        <p data-i18n="features.f3Body">Отворено секој ден освен недела, до доцна навечер во текот на седмицата.</p>
       </div>
       <div class="feature-card">
         <div class="icon">💳</div>
-        <h3>Флексибилни пакети</h3>
-        <p>Од дневен влез до годишно членство — избери го она што ти одговара.</p>
+        <h3 data-i18n="features.f4Title">Флексибилни пакети</h3>
+        <p data-i18n="features.f4Body">Од дневен влез до годишно членство — избери го она што ти одговара.</p>
       </div>
     </div>
   </div>
@@ -111,10 +117,10 @@
   <div class="container">
     <div class="section-head">
       <div>
-        <span class="eyebrow">Ценовник</span>
-        <h2 class="section-title">Пакети за членство</h2>
+        <span class="eyebrow" data-i18n="pricingPreview.eyebrow">Ценовник</span>
+        <h2 class="section-title" data-i18n="pricingPreview.title">Пакети за членство</h2>
       </div>
-      <a href="plans.html" class="btn btn-outline">Целосен ценовник →</a>
+      <a href="plans.html" class="btn btn-outline" data-i18n="pricingPreview.link">Целосен ценовник →</a>
     </div>
     <div class="grid-3" id="planPreview">
       <div class="skeleton-note">Се вчитуваат пакетите…</div>
@@ -122,17 +128,47 @@
   </div>
 </section>
 
+<section id="posts">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" data-i18n="posts.eyebrow">Од салата</span>
+        <h2 class="section-title" data-i18n="posts.title">Храна, суплементи и трансформации.</h2>
+      </div>
+      <p data-i18n="posts.subtitle">Илустративни објави во стил на нашиот Instagram — идеи за исхрана, совети за суплементи и приказни за напредок.</p>
+    </div>
+    <div class="post-tabs" id="postTabs">
+      <button class="post-tab active" data-cat="all" data-i18n="posts.tabAll">Сите</button>
+      <button class="post-tab" data-cat="food" data-i18n="posts.tabFood">Храна</button>
+      <button class="post-tab" data-cat="supplements" data-i18n="posts.tabSupplements">Суплементи</button>
+      <button class="post-tab" data-cat="transformations" data-i18n="posts.tabTransformations">Трансформации</button>
+    </div>
+    <div class="post-grid" id="postGrid">
+      <div class="post-card cat-food show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🍗</div><div class="post-body"><h4 data-i18n="posts.p1Title">Оброк по тренинг</h4><p data-i18n="posts.p1Body">Протеини + сложени јаглехидрати во првите 60 минути по тренингот.</p></div></div>
+      <div class="post-card cat-food show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🥗</div><div class="post-body"><h4 data-i18n="posts.p2Title">Мисирано на скара</h4><p data-i18n="posts.p2Body">Лесен, богат со протеини оброк идеален за ден со тренинг за сила.</p></div></div>
+      <div class="post-card cat-food show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🥣</div><div class="post-body"><h4 data-i18n="posts.p3Title">Овесна каша наутро</h4><p data-i18n="posts.p3Body">Стабилна енергија за утринските термини на функционален тренинг.</p></div></div>
+      <div class="post-card cat-supplements show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>🥤</div><div class="post-body"><h4 data-i18n="posts.p4Title">Протеини во прав</h4><p data-i18n="posts.p4Body">Кога да користиш суплемент, а кога оброкот е доволен — прашај го тренерот.</p></div></div>
+      <div class="post-card cat-supplements show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>💊</div><div class="post-body"><h4 data-i18n="posts.p5Title">Креатин — основи</h4><p data-i18n="posts.p5Body">Еден од најистражуваните суплементи за сила и издржливост.</p></div></div>
+      <div class="post-card cat-supplements show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>💧</div><div class="post-body"><h4 data-i18n="posts.p6Title">Хидратација</h4><p data-i18n="posts.p6Body">Вода и електролити пред и по интензивен тренинг во салата.</p></div></div>
+      <div class="post-card cat-transformations show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>📈</div><div class="post-body"><h4 data-i18n="posts.p7Title">3 месеци подоцна</h4><p data-i18n="posts.p7Body">Редовност и прогресивно оптоварување — тоа е целата тајна.</p></div></div>
+      <div class="post-card cat-transformations show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>🏁</div><div class="post-body"><h4 data-i18n="posts.p8Title">Прв натпревар</h4><p data-i18n="posts.p8Body">Од прв пробен термин до прва трка — приказна на наш член.</p></div></div>
+      <div class="post-card cat-transformations show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>🏆</div><div class="post-body"><h4 data-i18n="posts.p9Title">Годишен напредок</h4><p data-i18n="posts.p9Body">Пример за тоа што носи една година доследни тренинзи.</p></div></div>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="container" style="text-align:center;">
-    <span class="eyebrow">Прв чекор</span>
-    <h2 class="section-title" style="margin-bottom:16px;">Пробај бесплатно, без обврска.</h2>
-    <p style="max-width:52ch; margin:0 auto 26px;">Остави ги твоите податоци и нашиот тим ќе те контактира за да закажеме термин за твојата прва посета.</p>
-    <a href="contact.html" class="btn btn-primary">Закажи пробен термин</a>
+    <span class="eyebrow" data-i18n="trial.eyebrow">Прв чекор</span>
+    <h2 class="section-title" style="margin-bottom:16px;" data-i18n="trial.title">Пробај бесплатно, без обврска.</h2>
+    <p style="max-width:52ch; margin:0 auto 26px;" data-i18n="trial.body">Остави ги твоите податоци и нашиот тим ќе те контактира за да закажеме термин за твојата прва посета.</p>
+    <a href="contact.html" class="btn btn-primary" data-i18n="trial.cta">Закажи пробен термин</a>
   </div>
 </section>
 
 <div id="site-footer"></div>
 
+<script src="i18n.js"></script>
 <script src="layout.js"></script>
 <script>
   Arena.infoReady.then(function () {
@@ -140,18 +176,37 @@
   }).then(function (plans) {
     var top = plans.filter(function (p) { return ['Месечен', '3 месеци', 'Годишен'].indexOf(p.name) !== -1; });
     if (top.length === 0) top = plans.slice(0, 3);
-    var el = document.getElementById('planPreview');
-    el.innerHTML = top.map(function (p) {
-      return '<div class="plan-card' + (p.highlighted ? ' highlight' : '') + '">' +
-        (p.highlighted ? '<span class="ribbon">Најбарано</span>' : '') +
-        '<h3>' + Arena.esc(p.name) + '</h3>' +
-        '<p class="tagline">' + Arena.esc(p.tagline) + '</p>' +
-        '<div class="price">' + p.price + ' <span>ден / ' + Arena.esc(p.period) + '</span></div>' +
-        '<ul>' + p.features.slice(0,3).map(function (f) { return '<li>' + Arena.esc(f) + '</li>'; }).join('') + '</ul>' +
-        '<a href="plans.html" class="btn btn-outline btn-block">Детали</a>' +
-        '</div>';
-    }).join('');
+    function renderPlans() {
+      var el = document.getElementById('planPreview');
+      el.innerHTML = top.map(function (p) {
+        return '<div class="plan-card' + (p.highlighted ? ' highlight' : '') + '">' +
+          (p.highlighted ? '<span class="ribbon">' + I18N.t('common.ribbon') + '</span>' : '') +
+          '<h3>' + Arena.esc(p.name) + '</h3>' +
+          '<p class="tagline">' + Arena.esc(p.tagline) + '</p>' +
+          '<div class="price">' + p.price + ' <span>' + I18N.t('common.currency') + ' / ' + Arena.esc(p.period) + '</span></div>' +
+          '<ul>' + p.features.slice(0,3).map(function (f) { return '<li>' + Arena.esc(f) + '</li>'; }).join('') + '</ul>' +
+          '<a href="plans.html" class="btn btn-outline btn-block">' + I18N.t('pricingPreview.detailsBtn') + '</a>' +
+          '</div>';
+      }).join('');
+    }
+    renderPlans();
+    I18N.onChange(renderPlans);
   });
+
+  (function () {
+    var tabs = document.getElementById('postTabs');
+    var cards = document.querySelectorAll('#postGrid .post-card');
+    tabs.addEventListener('click', function (e) {
+      var btn = e.target.closest('.post-tab');
+      if (!btn) return;
+      Array.prototype.forEach.call(tabs.querySelectorAll('.post-tab'), function (t) { t.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-cat');
+      Array.prototype.forEach.call(cards, function (c) {
+        c.classList.toggle('show', cat === 'all' || c.classList.contains('cat-' + cat));
+      });
+    });
+  })();
 </script>
 </body>
 </html>

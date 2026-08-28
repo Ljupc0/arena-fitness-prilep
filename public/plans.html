@@ -13,14 +13,19 @@
 
 <section style="padding-bottom:0;">
   <div class="container">
-    <span class="eyebrow">Ценовник</span>
-    <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;">Избери го својот пакет</h1>
-    <p style="max-width:56ch;">Сите пакети вклучуваат целосен пристап до салата. Цените се во денари (МКД). Немаш обврска — можеш да смениш пакет во секое време.</p>
+    <span class="eyebrow" data-i18n="plans.eyebrow">Ценовник</span>
+    <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;" data-i18n="plans.title">Избери го својот пакет</h1>
+    <p style="max-width:56ch;" data-i18n="plans.subtitle">Сите пакети вклучуваат целосен пристап до салата. Цените се во денари (МКД). Немаш обврска — можеш да смениш пакет во секое време.</p>
   </div>
 </section>
 
 <section>
   <div class="container">
+    <div class="audience-tabs" id="audienceTabs">
+      <button class="audience-tab active" data-audience="all" data-i18n="plans.audienceAll">Сите</button>
+      <button class="audience-tab" data-audience="men" data-i18n="plans.audienceMen">Мажи</button>
+      <button class="audience-tab" data-audience="women" data-i18n="plans.audienceWomen">Жени</button>
+    </div>
     <div class="grid-3" id="plansGrid" style="align-items:stretch;">
       <div class="skeleton-note">Се вчитуваат пакетите…</div>
     </div>
@@ -29,27 +34,48 @@
 
 <section style="background:var(--panel-2); border-top:1px solid var(--border);">
   <div class="container" style="text-align:center;">
-    <span class="eyebrow">Не си сигурен кој пакет?</span>
-    <h2 class="section-title" style="margin-bottom:16px;">Дојди на бесплатен пробен термин.</h2>
-    <a href="contact.html" class="btn btn-primary">Закажи пробен термин</a>
+    <span class="eyebrow" data-i18n="plans.notSureEyebrow">Не си сигурен кој пакет?</span>
+    <h2 class="section-title" style="margin-bottom:16px;" data-i18n="plans.notSureTitle">Дојди на бесплатен пробен термин.</h2>
+    <a href="contact.html" class="btn btn-primary" data-i18n="plans.notSureCta">Закажи пробен термин</a>
   </div>
 </section>
 
 <div id="site-footer"></div>
+<script src="i18n.js"></script>
 <script src="layout.js"></script>
 <script>
-  fetch('/api/plans').then(function (r) { return r.json(); }).then(function (plans) {
+  var allPlans = [];
+  var activeAudience = 'all';
+
+  function renderPlans() {
     var el = document.getElementById('plansGrid');
-    el.innerHTML = plans.map(function (p) {
-      return '<div class="plan-card' + (p.highlighted ? ' highlight' : '') + '">' +
-        (p.highlighted ? '<span class="ribbon">Најбарано</span>' : '') +
+    el.innerHTML = allPlans.map(function (p) {
+      var audience = p.audience || 'all';
+      var matches = activeAudience === 'all' || audience === 'all' || audience === activeAudience;
+      return '<div class="plan-card' + (p.highlighted ? ' highlight' : '') + (matches ? ' show' : '') + '" data-audience="' + audience + '">' +
+        (p.highlighted ? '<span class="ribbon">' + I18N.t('common.ribbon') + '</span>' : '') +
         '<h3>' + Arena.esc(p.name) + '</h3>' +
         '<p class="tagline">' + Arena.esc(p.tagline) + '</p>' +
-        '<div class="price">' + p.price + ' <span>ден / ' + Arena.esc(p.period) + '</span></div>' +
+        '<div class="price">' + p.price + ' <span>' + I18N.t('common.currency') + ' / ' + Arena.esc(p.period) + '</span></div>' +
         '<ul>' + p.features.map(function (f) { return '<li>' + Arena.esc(f) + '</li>'; }).join('') + '</ul>' +
-        '<a href="contact.html?plan=' + encodeURIComponent(p.name) + '" class="btn ' + (p.highlighted ? 'btn-primary' : 'btn-outline') + ' btn-block">Пријави се</a>' +
+        '<a href="contact.html?plan=' + encodeURIComponent(p.name) + '" class="btn ' + (p.highlighted ? 'btn-primary' : 'btn-outline') + ' btn-block">' + I18N.t('plans.joinBtn') + '</a>' +
         '</div>';
     }).join('');
+  }
+
+  fetch('/api/plans').then(function (r) { return r.json(); }).then(function (plans) {
+    allPlans = plans;
+    renderPlans();
+    I18N.onChange(renderPlans);
+  });
+
+  document.getElementById('audienceTabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.audience-tab');
+    if (!btn) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.audience-tab'), function (t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    activeAudience = btn.getAttribute('data-audience');
+    renderPlans();
   });
 </script>
 </body>

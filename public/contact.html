@@ -14,36 +14,36 @@
 <section>
   <div class="container">
     <div style="text-align:center; margin-bottom:36px;">
-      <span class="eyebrow">Контакт</span>
-      <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;">Закажи пробен термин</h1>
-      <p style="max-width:52ch; margin:0 auto;">Пополни ја формата и ќе те контактираме за да закажеме термин за твојата прва бесплатна посета.</p>
+      <span class="eyebrow" data-i18n="contact.eyebrow">Контакт</span>
+      <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;" data-i18n="contact.title">Закажи пробен термин</h1>
+      <p style="max-width:52ch; margin:0 auto;" data-i18n="contact.subtitle">Пополни ја формата и ќе те контактираме за да закажеме термин за твојата прва бесплатна посета.</p>
     </div>
 
     <div class="form-card">
       <form id="leadForm">
         <div class="field">
-          <label for="name">Име и презиме</label>
+          <label for="name" data-i18n="contact.formName">Име и презиме</label>
           <input type="text" id="name" required>
         </div>
         <div class="field">
-          <label for="email">Email</label>
+          <label for="email" data-i18n="contact.formEmail">Email</label>
           <input type="email" id="email" required>
         </div>
         <div class="field">
-          <label for="phone">Телефон</label>
-          <input type="tel" id="phone" placeholder="070 000 000">
+          <label for="phone" data-i18n="contact.formPhone">Телефон</label>
+          <input type="tel" id="phone" placeholder="070 000 000" data-i18n-placeholder="contact.formPhonePlaceholder">
         </div>
         <div class="field">
-          <label for="interest">Пакет што те интересира</label>
+          <label for="interest" data-i18n="contact.formInterest">Пакет што те интересира</label>
           <select id="interest">
-            <option value="">Не сум сигурен/а</option>
+            <option value="" data-i18n="contact.formInterestDefault">Не сум сигурен/а</option>
           </select>
         </div>
         <div class="field">
-          <label for="message">Порака (опционално)</label>
-          <textarea id="message" placeholder="На пр. кога ти одговара термин, дали имаш искуство со тренинг..."></textarea>
+          <label for="message" data-i18n="contact.formMessage">Порака (опционално)</label>
+          <textarea id="message" placeholder="На пр. кога ти одговара термин, дали имаш искуство со тренинг..." data-i18n-placeholder="contact.formMessagePlaceholder"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Испрати барање</button>
+        <button type="submit" class="btn btn-primary btn-block" data-i18n="contact.formSubmit">Испрати барање</button>
         <p id="leadMsg" class="form-msg"></p>
       </form>
     </div>
@@ -51,30 +51,49 @@
     <div class="grid-3" style="margin-top:50px;">
       <div class="feature-card">
         <div class="icon">📍</div>
-        <h3>Локација</h3>
+        <h3 data-i18n="contact.infoLocationTitle">Локација</h3>
         <p id="infoAddress">—</p>
       </div>
       <div class="feature-card">
-        <div class="icon">📞</div>
-        <h3>Телефон</h3>
-        <p id="infoPhone">—</p>
-      </div>
-      <div class="feature-card">
         <div class="icon">🕒</div>
-        <h3>Работно време</h3>
+        <h3 data-i18n="contact.infoHoursTitle">Работно време</h3>
         <p id="infoHours">—</p>
       </div>
+      <div class="feature-card" id="contactIconsCard">
+        <div class="icon">📞</div>
+        <h3 data-i18n="contact.infoPhoneTitle">Телефон</h3>
+        <div class="icon-row" id="contactIcons"></div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:56px;">
+      <div>
+        <span class="eyebrow" data-i18n="contact.mapTitle">Каде се наоѓаме</span>
+        <h2 class="section-title" style="font-size:1.8rem;" id="mapAddress">—</h2>
+      </div>
+      <a id="mapOpenLink" href="#" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="contact.mapOpenLink">Отвори во Google Maps</a>
+    </div>
+    <div class="map-embed">
+      <iframe id="mapFrame" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Arena Fitness Prilep — локација"></iframe>
     </div>
   </div>
 </section>
 
 <div id="site-footer"></div>
+<script src="i18n.js"></script>
 <script src="layout.js"></script>
 <script>
   Arena.infoReady.then(function (info) {
     document.getElementById('infoAddress').textContent = info.address;
-    document.getElementById('infoPhone').textContent = info.phone;
     document.getElementById('infoHours').innerHTML = info.hours.map(function (h) { return h.label + ': ' + h.value; }).join('<br>');
+    document.getElementById('mapAddress').textContent = info.address;
+
+    var lat = info.lat || 41.3439648;
+    var lng = info.lng || 21.5517821;
+    document.getElementById('mapFrame').src = 'https://www.google.com/maps?q=' + lat + ',' + lng + '&z=16&output=embed';
+    document.getElementById('mapOpenLink').href = info.mapsUrl || ('https://www.google.com/maps?q=' + lat + ',' + lng);
+
+    document.getElementById('contactIcons').innerHTML = Arena.phoneLink() + Arena.instagramLink() + Arena.emailLink();
   });
 
   fetch('/api/plans').then(function (r) { return r.json(); }).then(function (plans) {
@@ -109,11 +128,11 @@
     }).then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
       .then(function (res) {
         if (res.ok) {
-          msg.textContent = 'Ви благодариме! Ќе ве контактираме наскоро за да закажеме термин.';
+          msg.textContent = I18N.t('contact.msgSuccess');
           msg.className = 'form-msg ok';
           document.getElementById('leadForm').reset();
         } else {
-          msg.textContent = res.data.error || 'Настана грешка. Обидете се повторно.';
+          msg.textContent = res.data.error || I18N.t('contact.msgError');
           msg.className = 'form-msg err';
         }
       });
