@@ -54,6 +54,10 @@ var I18N = (function () {
       'pricingPreview.detailsBtn': 'Детали',
       'common.ribbon': 'Најбарано',
       'common.currency': 'ден',
+      'common.addressLabel': 'Адреса',
+      'common.phoneLabel': 'Телефон',
+      'common.emailLabel': 'Email',
+      'common.followUs': 'Следете нè:',
 
       'posts.eyebrow': 'Од салата',
       'posts.title': 'Храна, суплементи и трансформации.',
@@ -86,6 +90,7 @@ var I18N = (function () {
       'trial.body': 'Остави ги твоите податоци и нашиот тим ќе те контактира за да закажеме термин за твојата прва посета.',
       'trial.cta': 'Закажи пробен термин',
 
+      'footer.contactTitle': 'Контакт',
       'footer.hoursTitle': 'Работно време',
       'footer.linksTitle': 'Брзи линкови',
       'footer.linkPlans': 'Ценовник',
@@ -206,6 +211,10 @@ var I18N = (function () {
       'pricingPreview.detailsBtn': 'Details',
       'common.ribbon': 'Most popular',
       'common.currency': 'MKD',
+      'common.addressLabel': 'Address',
+      'common.phoneLabel': 'Phone',
+      'common.emailLabel': 'Email',
+      'common.followUs': 'Follow us:',
 
       'posts.eyebrow': 'From the gym',
       'posts.title': 'Food, supplements & transformations.',
@@ -238,6 +247,7 @@ var I18N = (function () {
       'trial.body': 'Leave your details and our team will contact you to book your first visit.',
       'trial.cta': 'Book a trial session',
 
+      'footer.contactTitle': 'Contact',
       'footer.hoursTitle': 'Opening hours',
       'footer.linksTitle': 'Quick links',
       'footer.linkPlans': 'Pricing',

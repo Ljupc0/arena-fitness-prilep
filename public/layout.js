@@ -55,9 +55,9 @@ var Arena = (function () {
   }
 
   // A generic "camera in a rounded square" glyph evoking Instagram without
-  // reproducing the trademarked logo artwork. Filled with a static
-  // Instagram-style gradient; the gradient itself animates on hover via CSS
-  // (hue-rotate on .icon-link.instagram:hover .icon-circle svg).
+  // reproducing the trademarked logo artwork. The badge that wraps this
+  // (.social-badge) carries the static Instagram-style gradient background;
+  // the glyph itself shimmers on hover via CSS (hue-rotate, see igShimmer).
   function instagramIconSvg() {
     return (
       '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
@@ -77,30 +77,53 @@ var Arena = (function () {
     );
   }
 
-  function phoneLink(cls) {
-    var tel = 'tel:' + esc(info.phone.replace(/\s/g, ''));
+  // Solid map-pin marker. The punched-out center dot is a literal hex fill
+  // (matching --bg) rather than currentColor/var() — safe now that the site
+  // is a single fixed dark theme, so that exact background color never changes.
+  function pinIconSvg() {
     return (
-      '<a href="' + tel + '" class="icon-link phone' + (cls ? ' ' + cls : '') + '">' +
-      '<span class="icon-circle">' + phoneIconSvg() + '</span>' +
-      '<span class="label">' + esc(info.phone) + '</span>' +
-      '</a>'
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 6.72 11.23 7.55 11.94a.68.68 0 0 0 .9 0C13.28 21.23 20 15.25 20 10c0-4.42-3.58-8-8-8z" fill="currentColor"/>' +
+      '<circle cx="12" cy="10" r="2.7" fill="#0c0f0a"/>' +
+      '</svg>'
     );
   }
 
-  function instagramLink(cls) {
+  // Ring-style rows: a lime-outlined circle icon beside a small uppercase
+  // label and a bold value line — used in the footer's "Контакт" block and
+  // on the contact page's info card.
+  function iconRow(cls, iconSvg, label, value, href, external) {
+    var attrs = 'class="icon-link ' + cls + '"';
+    var tag = href ? 'a' : 'div';
+    if (href) attrs += ' href="' + esc(href) + '"' + (external ? ' target="_blank" rel="noopener"' : '');
     return (
-      '<a href="' + esc(info.instagram) + '" target="_blank" rel="noopener" class="icon-link instagram' + (cls ? ' ' + cls : '') + '">' +
-      '<span class="icon-circle">' + instagramIconSvg() + '</span>' +
-      '<span class="label">Instagram</span>' +
-      '</a>'
+      '<' + tag + ' ' + attrs + '>' +
+      '<span class="icon-ring">' + iconSvg + '</span>' +
+      '<span class="text"><span class="label">' + esc(label) + '</span><span class="value">' + esc(value) + '</span></span>' +
+      '</' + tag + '>'
     );
   }
 
-  function emailLink(cls) {
+  function addressLink() {
+    var mapsUrl = info.mapsUrl || ('https://www.google.com/maps?q=' + (info.lat || 41.3439648) + ',' + (info.lng || 21.5517821));
+    return iconRow('address', pinIconSvg(), I18N.t('common.addressLabel'), info.address, mapsUrl, true);
+  }
+
+  function phoneLink() {
+    return iconRow('phone', phoneIconSvg(), I18N.t('common.phoneLabel'), info.phone, 'tel:' + info.phone.replace(/\s/g, ''), false);
+  }
+
+  function emailLink() {
+    return iconRow('email', mailIconSvg(), I18N.t('common.emailLabel'), info.email, 'mailto:' + info.email, false);
+  }
+
+  // Compact icon-only badge for a "follow us" row (footer + contact page) —
+  // distinct from the label+value rows above, matching how a gym's own site
+  // typically separates contact details from social links.
+  function instagramBadge() {
     return (
-      '<a href="mailto:' + esc(info.email) + '" class="icon-link email' + (cls ? ' ' + cls : '') + '">' +
-      '<span class="icon-circle">' + mailIconSvg() + '</span>' +
-      '<span class="label">' + esc(info.email) + '</span>' +
+      '<a href="' + esc(info.instagram) + '" target="_blank" rel="noopener" class="social-badge" aria-label="Instagram">' +
+      instagramIconSvg() +
       '</a>'
     );
   }
@@ -195,8 +218,9 @@ var Arena = (function () {
       '<div class="footer-grid">' +
       '<div>' +
       '<div class="footer-brand-name">ARENA <span style="color:var(--lime)">FITNESS</span></div>' +
-      '<p>' + esc(info.address) + '</p>' +
-      '<div class="footer-contact">' + phoneLink() + instagramLink() + emailLink() + '</div>' +
+      '<h4 style="margin-top:18px;">' + I18N.t('footer.contactTitle') + '</h4>' +
+      '<div class="footer-contact">' + addressLink() + phoneLink() + emailLink() + '</div>' +
+      '<div class="social-row"><span class="social-label">' + I18N.t('common.followUs') + '</span>' + instagramBadge() + '</div>' +
       '</div>' +
       '<div><h4>' + I18N.t('footer.hoursTitle') + '</h4>' + hoursHtml + '</div>' +
       '<div><h4>' + I18N.t('footer.linksTitle') + '</h4>' +
@@ -271,8 +295,9 @@ var Arena = (function () {
     get info() { return info; },
     logout: logout,
     esc: esc,
+    addressLink: addressLink,
     phoneLink: phoneLink,
-    instagramLink: instagramLink,
     emailLink: emailLink,
+    instagramBadge: instagramBadge,
   };
 })();
