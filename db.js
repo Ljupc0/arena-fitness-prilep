@@ -17,7 +17,7 @@ function needsRecreate() {
     .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='plans'")
     .get();
   if (!tbl) return false; // fresh DB, nothing to recreate
-  return !tableHasColumn('plans', 'period');
+  return !tableHasColumn('plans', 'period') || !tableHasColumn('plans', 'audience');
 }
 
 if (needsRecreate()) {
@@ -39,7 +39,8 @@ db.exec(`
     tagline TEXT NOT NULL,
     features TEXT NOT NULL,
     highlighted INTEGER NOT NULL DEFAULT 0,
-    sort_order INTEGER NOT NULL DEFAULT 0
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    audience TEXT NOT NULL DEFAULT 'all'
   );
 
   CREATE TABLE IF NOT EXISTS schedule (
@@ -90,8 +91,8 @@ db.exec(`
 const planCount = db.prepare('SELECT COUNT(*) AS c FROM plans').get().c;
 if (planCount === 0) {
   const insertPlan = db.prepare(`
-    INSERT INTO plans (name, price, period, tagline, features, highlighted, sort_order)
-    VALUES (@name, @price, @period, @tagline, @features, @highlighted, @sort_order)
+    INSERT INTO plans (name, price, period, tagline, features, highlighted, sort_order, audience)
+    VALUES (@name, @price, @period, @tagline, @features, @highlighted, @sort_order, @audience)
   `);
   const plans = [
     {
@@ -106,6 +107,7 @@ if (planCount === 0) {
       ]),
       highlighted: 0,
       sort_order: 1,
+      audience: 'all',
     },
     {
       name: 'Студентски',
@@ -119,6 +121,7 @@ if (planCount === 0) {
       ]),
       highlighted: 0,
       sort_order: 2,
+      audience: 'all',
     },
     {
       name: 'Месечен',
@@ -132,6 +135,7 @@ if (planCount === 0) {
       ]),
       highlighted: 1,
       sort_order: 3,
+      audience: 'all',
     },
     {
       name: '3 месеци',
@@ -145,6 +149,7 @@ if (planCount === 0) {
       ]),
       highlighted: 0,
       sort_order: 4,
+      audience: 'all',
     },
     {
       name: '6 месеци',
@@ -158,6 +163,7 @@ if (planCount === 0) {
       ]),
       highlighted: 0,
       sort_order: 5,
+      audience: 'all',
     },
     {
       name: 'Годишен',
@@ -171,6 +177,7 @@ if (planCount === 0) {
       ]),
       highlighted: 0,
       sort_order: 6,
+      audience: 'all',
     },
   ];
   const insertMany = db.transaction((rows) => rows.forEach((r) => insertPlan.run(r)));

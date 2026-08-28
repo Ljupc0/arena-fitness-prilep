@@ -67,7 +67,11 @@ app.get('/api/info', (req, res) => {
     name: 'Arena Fitness Prilep',
     address: 'Катна гаража, приземје, Прилеп',
     phone: '075 307 690',
+    email: 'info@arenafitnessprilep.mk',
     instagram: 'https://www.instagram.com/arenafitnesprilep',
+    mapsUrl: 'https://www.google.com/maps?q=41.3439648,21.5517821',
+    lat: 41.3439648,
+    lng: 21.5517821,
     hours: [
       { label: 'Понеделник – Петок', value: '09:00 – 22:00' },
       { label: 'Сабота', value: '09:00 – 21:00' },
@@ -274,14 +278,14 @@ app.get('/api/admin/bookings', requireAdmin, (req, res) => {
 });
 
 app.post('/api/admin/plans', requireAdmin, (req, res) => {
-  const { name, price, period, tagline, features, highlighted, sort_order } = req.body || {};
+  const { name, price, period, tagline, features, highlighted, sort_order, audience } = req.body || {};
   if (!name || price == null || !period) {
     return res.status(400).json({ error: 'Име, цена и период се задолжителни.' });
   }
   const info = db
     .prepare(
-      `INSERT INTO plans (name, price, period, tagline, features, highlighted, sort_order)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO plans (name, price, period, tagline, features, highlighted, sort_order, audience)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       name,
@@ -290,7 +294,8 @@ app.post('/api/admin/plans', requireAdmin, (req, res) => {
       tagline || '',
       JSON.stringify(features || []),
       highlighted ? 1 : 0,
-      sort_order || 0
+      sort_order || 0,
+      audience || 'all'
     );
   res.status(201).json({ id: info.lastInsertRowid });
 });
@@ -298,9 +303,9 @@ app.post('/api/admin/plans', requireAdmin, (req, res) => {
 app.patch('/api/admin/plans/:id', requireAdmin, (req, res) => {
   const existing = db.prepare('SELECT * FROM plans WHERE id = ?').get(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Планот не е пронајден.' });
-  const { name, price, period, tagline, features, highlighted, sort_order } = req.body || {};
+  const { name, price, period, tagline, features, highlighted, sort_order, audience } = req.body || {};
   db.prepare(
-    `UPDATE plans SET name=?, price=?, period=?, tagline=?, features=?, highlighted=?, sort_order=? WHERE id=?`
+    `UPDATE plans SET name=?, price=?, period=?, tagline=?, features=?, highlighted=?, sort_order=?, audience=? WHERE id=?`
   ).run(
     name ?? existing.name,
     price ?? existing.price,
@@ -309,6 +314,7 @@ app.patch('/api/admin/plans/:id', requireAdmin, (req, res) => {
     features ? JSON.stringify(features) : existing.features,
     highlighted != null ? (highlighted ? 1 : 0) : existing.highlighted,
     sort_order ?? existing.sort_order,
+    audience ?? existing.audience,
     req.params.id
   );
   res.json({ ok: true });
