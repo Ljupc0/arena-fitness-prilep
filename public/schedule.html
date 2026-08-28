@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Распоред на тренинзи — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section style="padding-bottom:0;">
+  <div class="container">
+    <span class="eyebrow">Распоред</span>
+    <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;">Групни тренинзи</h1>
+    <p style="max-width:56ch;">Резервирај го своето место за наредниот термин. Резервацијата бара најавена сметка — бесплатна е за сите members.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="day-tabs" id="dayTabs"></div>
+    <div id="classList"><div class="skeleton-note">Се вчитува распоредот…</div></div>
+    <p id="bookMsg" class="form-msg" style="text-align:center;"></p>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="layout.js"></script>
+<script>
+  var DAY_LABELS = ['Понеделник','Вторник','Среда','Четврток','Петок','Сабота','Недела'];
+  var allClasses = [];
+  var activeDay = new Date().getDay(); // JS 0=Sun..6=Sat
+  activeDay = activeDay === 0 ? 6 : activeDay - 1; // convert to 0=Mon..6=Sun
+
+  function renderTabs() {
+    var el = document.getElementById('dayTabs');
+    el.innerHTML = DAY_LABELS.map(function (d, i) {
+      return '<button class="day-tab' + (i === activeDay ? ' active' : '') + '" data-day="' + i + '">' + d + '</button>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('.day-tab'), function (btn) {
+      btn.addEventListener('click', function () {
+        activeDay = parseInt(btn.getAttribute('data-day'), 10);
+        renderTabs();
+        renderList();
+      });
+    });
+  }
+
+  function renderList() {
+    var el = document.getElementById('classList');
+    var items = allClasses.filter(function (c) { return c.day_of_week === activeDay; });
+    if (items.length === 0) {
+      el.innerHTML = '<div class="empty-state"><div class="display">Нема закажани термини</div><p>Провери некој друг ден од неделата.</p></div>';
+      return;
+    }
+    el.innerHTML = items.map(function (c) {
+      var full = c.spots_left <= 0;
+      return '<div class="class-row">' +
+        '<div class="time">' + c.time + '</div>' +
+        '<div><h4>' + Arena.esc(c.class_name) + '</h4><div class="meta">' + Arena.esc(c.room) + ' · ' + c.duration_min + ' мин · ' + Arena.esc(c.level) + '</div></div>' +
+        '<div class="spots' + (full ? ' full' : '') + '">' + (full ? '<b>Пополнето</b>' : '<b>' + c.spots_left + '</b> слободни') + '<div class="meta">' + c.next_date + '</div></div>' +
+        '<button class="btn ' + (full ? 'btn-outline' : 'btn-primary') + '" data-id="' + c.id + '" data-date="' + c.next_date + '"' + (full ? ' disabled' : '') + '>Резервирај</button>' +
+        '</div>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('button[data-id]'), function (btn) {
+      btn.addEventListener('click', function () { book(btn.getAttribute('data-id'), btn.getAttribute('data-date')); });
+    });
+  }
+
+  function book(scheduleId, date) {
+    var msg = document.getElementById('bookMsg');
+    Arena.authReady.then(function (user) {
+      if (!user) {
+        window.location.href = 'login.html?next=schedule.html';
+        return;
+      }
+      fetch('/api/bookings', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ schedule_id: Number(scheduleId), class_date: date }),
+      }).then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+        .then(function (res) {
+          if (res.ok) {
+            msg.textContent = 'Резервирано! Го најде терминот во твојот профил.';
+            msg.className = 'form-msg ok';
+            loadSchedule();
+          } else {
+            msg.textContent = res.data.error || 'Грешка при резервацијата.';
+            msg.className = 'form-msg err';
+          }
+        });
+    });
+  }
+
+  function loadSchedule() {
+    fetch('/api/schedule').then(function (r) { return r.json(); }).then(function (data) {
+      allClasses = data;
+      renderList();
+    });
+  }
+
+  renderTabs();
+  loadSchedule();
+</script>
+</body>
+</html>

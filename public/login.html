@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Најава — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section>
+  <div class="container">
+    <div class="form-card">
+      <h1 class="display" style="font-size:2rem; margin-bottom:6px;">Најава</h1>
+      <p style="margin-bottom:24px;">Најави се за да резервираш термини и да го следиш своето членство.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="field">
+          <label for="password">Лозинка</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Најави се</button>
+        <p id="loginMsg" class="form-msg"></p>
+      </form>
+      <p class="form-foot">Немаш сметка? <a href="register.html">Регистрирај се</a></p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="layout.js"></script>
+<script>
+  Arena.authReady.then(function (user) {
+    if (user) {
+      var params = new URLSearchParams(window.location.search);
+      window.location.href = params.get('next') || 'account.html';
+    }
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('loginMsg');
+    var payload = {
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value,
+    };
+    fetch('/api/auth/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (res) {
+        if (res.ok) {
+          var params = new URLSearchParams(window.location.search);
+          window.location.href = params.get('next') || 'account.html';
+        } else {
+          msg.textContent = res.data.error || 'Најавата не успеа.';
+          msg.className = 'form-msg err';
+        }
+      });
+  });
+</script>
+</body>
+</html>

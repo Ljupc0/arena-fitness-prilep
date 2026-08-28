@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Закажи пробен термин — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section>
+  <div class="container">
+    <div style="text-align:center; margin-bottom:36px;">
+      <span class="eyebrow">Контакт</span>
+      <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;">Закажи пробен термин</h1>
+      <p style="max-width:52ch; margin:0 auto;">Пополни ја формата и ќе те контактираме за да закажеме термин за твојата прва бесплатна посета.</p>
+    </div>
+
+    <div class="form-card">
+      <form id="leadForm">
+        <div class="field">
+          <label for="name">Име и презиме</label>
+          <input type="text" id="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="field">
+          <label for="phone">Телефон</label>
+          <input type="tel" id="phone" placeholder="070 000 000">
+        </div>
+        <div class="field">
+          <label for="interest">Пакет што те интересира</label>
+          <select id="interest">
+            <option value="">Не сум сигурен/а</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Порака (опционално)</label>
+          <textarea id="message" placeholder="На пр. кога ти одговара термин, дали имаш искуство со тренинг..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Испрати барање</button>
+        <p id="leadMsg" class="form-msg"></p>
+      </form>
+    </div>
+
+    <div class="grid-3" style="margin-top:50px;">
+      <div class="feature-card">
+        <div class="icon">📍</div>
+        <h3>Локација</h3>
+        <p id="infoAddress">—</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📞</div>
+        <h3>Телефон</h3>
+        <p id="infoPhone">—</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🕒</div>
+        <h3>Работно време</h3>
+        <p id="infoHours">—</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="layout.js"></script>
+<script>
+  Arena.infoReady.then(function (info) {
+    document.getElementById('infoAddress').textContent = info.address;
+    document.getElementById('infoPhone').textContent = info.phone;
+    document.getElementById('infoHours').innerHTML = info.hours.map(function (h) { return h.label + ': ' + h.value; }).join('<br>');
+  });
+
+  fetch('/api/plans').then(function (r) { return r.json(); }).then(function (plans) {
+    var sel = document.getElementById('interest');
+    plans.forEach(function (p) {
+      var opt = document.createElement('option');
+      opt.value = p.name;
+      opt.textContent = p.name;
+      sel.appendChild(opt);
+    });
+    var params = new URLSearchParams(window.location.search);
+    var plan = params.get('plan');
+    if (plan && Array.prototype.some.call(sel.options, function (o) { return o.value === plan; })) {
+      sel.value = plan;
+    }
+  });
+
+  document.getElementById('leadForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('leadMsg');
+    var payload = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      interest: document.getElementById('interest').value,
+      message: document.getElementById('message').value.trim(),
+    };
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (res) {
+        if (res.ok) {
+          msg.textContent = 'Ви благодариме! Ќе ве контактираме наскоро за да закажеме термин.';
+          msg.className = 'form-msg ok';
+          document.getElementById('leadForm').reset();
+        } else {
+          msg.textContent = res.data.error || 'Настана грешка. Обидете се повторно.';
+          msg.className = 'form-msg err';
+        }
+      });
+  });
+</script>
+</body>
+</html>

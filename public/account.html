@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мојот профил — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section>
+  <div class="container">
+    <div class="account-header">
+      <div>
+        <span class="eyebrow">Мојот профил</span>
+        <h1 class="display" id="acctName" style="font-size:clamp(2rem,4vw,2.8rem);">—</h1>
+        <p id="acctEmail" style="margin:4px 0 0;">—</p>
+      </div>
+      <button id="signOutBtn" class="btn btn-outline">Одјава</button>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Резервации</span>
+        <h2 class="section-title" style="font-size:1.6rem;">Моите термини</h2>
+      </div>
+      <a href="schedule.html" class="btn btn-primary">+ Резервирај нов термин</a>
+    </div>
+    <div id="bookingsList"><div class="skeleton-note">Се вчитуваат резервациите…</div></div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="layout.js"></script>
+<script>
+  Arena.authReady.then(function (user) {
+    if (!user) {
+      window.location.href = 'login.html?next=account.html';
+      return;
+    }
+    document.getElementById('acctName').textContent = user.name;
+    document.getElementById('acctEmail').textContent = user.email;
+    loadBookings();
+  });
+
+  function loadBookings() {
+    fetch('/api/account/bookings', { credentials: 'include' })
+      .then(function (r) { return r.json(); })
+      .then(function (rows) {
+        var el = document.getElementById('bookingsList');
+        if (rows.length === 0) {
+          el.innerHTML = '<div class="empty-state"><div class="display">Немаш резервации</div><p>Провери го распоредот и резервирај го својот прв термин.</p></div>';
+          return;
+        }
+        el.innerHTML = rows.map(function (b) {
+          return '<div class="booking-card">' +
+            '<div><h4>' + Arena.esc(b.class_name) + '</h4><div class="meta">' + Arena.esc(b.day_label) + ' · ' + b.class_date + ' во ' + b.time + '</div></div>' +
+            '<button class="link-btn danger" data-id="' + b.id + '">Откажи</button>' +
+            '</div>';
+        }).join('');
+        Array.prototype.forEach.call(el.querySelectorAll('button[data-id]'), function (btn) {
+          btn.addEventListener('click', function () { cancelBooking(btn.getAttribute('data-id')); });
+        });
+      });
+  }
+
+  function cancelBooking(id) {
+    fetch('/api/bookings/' + id, { method: 'DELETE', credentials: 'include' }).then(function () { loadBookings(); });
+  }
+
+  document.getElementById('signOutBtn').addEventListener('click', Arena.logout);
+</script>
+</body>
+</html>

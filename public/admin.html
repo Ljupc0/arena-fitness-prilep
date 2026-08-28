@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: var(--bg); }
+  .login-wrap { max-width: 420px; margin: 90px auto; }
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login-wrap">
+  <div class="form-card">
+    <h1 class="display" style="font-size:2rem; margin-bottom:6px;">Admin — Arena Fitness</h1>
+    <p style="margin-bottom:24px;">Најава за управниот панел.</p>
+    <div class="field"><label for="userInput">Корисничко име</label><input type="text" id="userInput"></div>
+    <div class="field"><label for="passInput">Лозинка</label><input type="password" id="passInput"></div>
+    <button id="loginBtn" class="btn btn-primary btn-block">Најави се</button>
+    <p id="loginMsg" class="form-msg err"></p>
+  </div>
+</div>
+
+<div id="adminView" class="admin-shell" style="display:none;">
+  <div class="admin-top">
+    <h1 class="display" style="font-size:1.6rem;">ARENA <span style="color:var(--lime)">ADMIN</span></h1>
+    <div style="display:flex; gap:14px; align-items:center;">
+      <a href="index.html" class="btn btn-outline" style="padding:8px 16px;">← Кон страницата</a>
+      <button id="logoutBtn" class="btn btn-outline" style="padding:8px 16px;">Одјава</button>
+    </div>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="leads">Барања (Leads)</button>
+    <button class="admin-tab" data-tab="bookings">Резервации</button>
+    <button class="admin-tab" data-tab="members">Members</button>
+    <button class="admin-tab" data-tab="schedule">Распоред</button>
+    <button class="admin-tab" data-tab="plans">Планови</button>
+  </div>
+  <div class="admin-body">
+
+    <div class="tab-panel" data-panel="leads">
+      <div class="table-wrap"><table class="data-table" id="leadsTable">
+        <thead><tr><th>Име</th><th>Контакт</th><th>Интерес</th><th>Порака</th><th>Статус</th><th>Датум</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="tab-panel" data-panel="bookings" style="display:none;">
+      <div class="table-wrap"><table class="data-table" id="bookingsTable">
+        <thead><tr><th>Член</th><th>Час</th><th>Датум</th><th>Време</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="tab-panel" data-panel="members" style="display:none;">
+      <div class="table-wrap"><table class="data-table" id="membersTable">
+        <thead><tr><th>Име</th><th>Email</th><th>Телефон</th><th>Резервации</th><th>Регистриран</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="tab-panel" data-panel="schedule" style="display:none;">
+      <div class="admin-card">
+        <h3 style="font-family:'Oswald',sans-serif; text-transform:uppercase; margin-bottom:16px;">Додај час</h3>
+        <form id="scheduleForm" class="admin-grid-form">
+          <div class="field" style="margin:0;"><label>Ден</label>
+            <select id="schDay">
+              <option value="0">Понеделник</option><option value="1">Вторник</option><option value="2">Среда</option>
+              <option value="3">Четврток</option><option value="4">Петок</option><option value="5">Сабота</option><option value="6">Недела</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0;"><label>Време</label><input type="time" id="schTime" required></div>
+          <div class="field" style="margin:0;"><label>Име на час</label><input type="text" id="schName" required></div>
+          <div class="field" style="margin:0;"><label>Сала</label><input type="text" id="schRoom"></div>
+          <div class="field" style="margin:0;"><label>Траење (мин)</label><input type="number" id="schDuration" value="50"></div>
+          <div class="field" style="margin:0;"><label>Ниво</label><input type="text" id="schLevel" value="Сите нивоа"></div>
+          <div class="field" style="margin:0;"><label>Капацитет</label><input type="number" id="schCapacity" value="16"></div>
+        </form>
+        <button id="scheduleSubmit" class="btn btn-primary" style="margin-top:10px;">Додади час</button>
+        <p id="scheduleMsg" class="form-msg"></p>
+      </div>
+      <div class="table-wrap"><table class="data-table" id="scheduleTable">
+        <thead><tr><th>Ден</th><th>Време</th><th>Час</th><th>Сала</th><th>Капацитет</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="tab-panel" data-panel="plans" style="display:none;">
+      <div class="admin-card">
+        <h3 style="font-family:'Oswald',sans-serif; text-transform:uppercase; margin-bottom:16px;">Додај пакет</h3>
+        <form id="planForm" class="admin-grid-form">
+          <div class="field" style="margin:0;"><label>Име</label><input type="text" id="plName" required></div>
+          <div class="field" style="margin:0;"><label>Цена (ден)</label><input type="number" id="plPrice" required></div>
+          <div class="field" style="margin:0;"><label>Период</label><input type="text" id="plPeriod" placeholder="месечно" required></div>
+          <div class="field" style="margin:0;"><label>Слоган</label><input type="text" id="plTagline"></div>
+          <div class="field" style="margin:0;"><label>Карактеристики (одделени со ;)</label><input type="text" id="plFeatures" placeholder="Пристап; Групни часови"></div>
+          <div class="field" style="margin:0;"><label><input type="checkbox" id="plHighlighted" style="width:auto; margin-right:6px;">Истакни (Најбарано)</label></div>
+        </form>
+        <button id="planSubmit" class="btn btn-primary" style="margin-top:10px;">Додади пакет</button>
+        <p id="planMsg" class="form-msg"></p>
+      </div>
+      <div class="table-wrap"><table class="data-table" id="plansTable">
+        <thead><tr><th>Име</th><th>Цена</th><th>Период</th><th>Истакнат</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var DAY_LABELS = ['Понеделник','Вторник','Среда','Четврток','Петок','Сабота','Недела'];
+  var creds = null;
+
+  function authHeader() {
+    return { Authorization: 'Basic ' + btoa(creds.user + ':' + creds.pass) };
+  }
+
+  function apiFetch(url, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({}, opts.headers, authHeader());
+    return fetch(url, opts);
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', function () {
+    var user = document.getElementById('userInput').value;
+    var pass = document.getElementById('passInput').value;
+    creds = { user: user, pass: pass };
+    apiFetch('/api/admin/leads').then(function (r) {
+      if (r.ok) {
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('adminView').style.display = 'block';
+        loadAll();
+      } else {
+        document.getElementById('loginMsg').textContent = 'Погрешно корисничко име или лозинка.';
+        creds = null;
+      }
+    });
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    creds = null;
+    document.getElementById('adminView').style.display = 'none';
+    document.getElementById('loginView').style.display = 'block';
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.admin-tab'), function (tab) {
+    tab.addEventListener('click', function () {
+      Array.prototype.forEach.call(document.querySelectorAll('.admin-tab'), function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var name = tab.getAttribute('data-tab');
+      Array.prototype.forEach.call(document.querySelectorAll('.tab-panel'), function (p) {
+        p.style.display = p.getAttribute('data-panel') === name ? 'block' : 'none';
+      });
+    });
+  });
+
+  function loadAll() {
+    loadLeads(); loadBookings(); loadMembers(); loadSchedule(); loadPlans();
+  }
+
+  function loadLeads() {
+    apiFetch('/api/admin/leads').then(function (r) { return r.json(); }).then(function (rows) {
+      var tbody = document.querySelector('#leadsTable tbody');
+      tbody.innerHTML = rows.map(function (l) {
+        return '<tr><td>' + esc(l.name) + '</td><td>' + esc(l.email) + (l.phone ? '<br>' + esc(l.phone) : '') + '</td>' +
+          '<td>' + esc(l.interest || '—') + '</td><td>' + esc(l.message || '—') + '</td>' +
+          '<td><select data-id="' + l.id + '" class="leadStatus">' +
+            ['ново','контактиран','затворен'].map(function (s) { return '<option value="' + s + '"' + (s === l.status ? ' selected' : '') + '>' + s + '</option>'; }).join('') +
+          '</select></td>' +
+          '<td>' + esc(l.created_at) + '</td></tr>';
+      }).join('') || '<tr><td colspan="6" style="text-align:center; color:var(--ink-mute);">Нема барања сеуште.</td></tr>';
+      Array.prototype.forEach.call(tbody.querySelectorAll('.leadStatus'), function (sel) {
+        sel.addEventListener('change', function () {
+          apiFetch('/api/admin/leads/' + sel.getAttribute('data-id'), {
+            method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: sel.value }),
+          });
+        });
+      });
+    });
+  }
+
+  function loadBookings() {
+    apiFetch('/api/admin/bookings').then(function (r) { return r.json(); }).then(function (rows) {
+      var tbody = document.querySelector('#bookingsTable tbody');
+      tbody.innerHTML = rows.map(function (b) {
+        return '<tr><td>' + esc(b.member_name) + '<br><span style="color:var(--ink-mute); font-size:0.8em;">' + esc(b.member_email) + '</span></td>' +
+          '<td>' + esc(b.class_name) + '</td><td>' + esc(b.class_date) + '</td><td>' + esc(b.time) + '</td></tr>';
+      }).join('') || '<tr><td colspan="4" style="text-align:center; color:var(--ink-mute);">Нема резервации сеуште.</td></tr>';
+    });
+  }
+
+  function loadMembers() {
+    apiFetch('/api/admin/members').then(function (r) { return r.json(); }).then(function (rows) {
+      var tbody = document.querySelector('#membersTable tbody');
+      tbody.innerHTML = rows.map(function (m) {
+        return '<tr><td>' + esc(m.name) + '</td><td>' + esc(m.email) + '</td><td>' + esc(m.phone || '—') + '</td>' +
+          '<td>' + m.booking_count + '</td><td>' + esc(m.created_at) + '</td></tr>';
+      }).join('') || '<tr><td colspan="5" style="text-align:center; color:var(--ink-mute);">Нема регистрирани members сеуште.</td></tr>';
+    });
+  }
+
+  function loadSchedule() {
+    apiFetch('/api/schedule').then(function (r) { return r.json(); }).then(function (rows) {
+      var tbody = document.querySelector('#scheduleTable tbody');
+      tbody.innerHTML = rows.map(function (c) {
+        return '<tr><td>' + DAY_LABELS[c.day_of_week] + '</td><td>' + esc(c.time) + '</td><td>' + esc(c.class_name) + '</td>' +
+          '<td>' + esc(c.room) + '</td><td>' + c.capacity + '</td>' +
+          '<td><button class="link-btn danger" data-id="' + c.id + '">Избриши</button></td></tr>';
+      }).join('');
+      Array.prototype.forEach.call(tbody.querySelectorAll('button[data-id]'), function (btn) {
+        btn.addEventListener('click', function () {
+          apiFetch('/api/admin/schedule/' + btn.getAttribute('data-id'), { method: 'DELETE' }).then(loadSchedule);
+        });
+      });
+    });
+  }
+
+  document.getElementById('scheduleSubmit').addEventListener('click', function () {
+    var msg = document.getElementById('scheduleMsg');
+    var payload = {
+      day_of_week: Number(document.getElementById('schDay').value),
+      time: document.getElementById('schTime').value,
+      class_name: document.getElementById('schName').value,
+      room: document.getElementById('schRoom').value,
+      duration_min: Number(document.getElementById('schDuration').value) || 50,
+      level: document.getElementById('schLevel').value,
+      capacity: Number(document.getElementById('schCapacity').value) || 16,
+    };
+    apiFetch('/api/admin/schedule', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        msg.textContent = res.ok ? 'Часот е додаден.' : (res.d.error || 'Грешка.');
+        msg.className = 'form-msg ' + (res.ok ? 'ok' : 'err');
+        if (res.ok) { document.getElementById('scheduleForm').reset(); loadSchedule(); }
+      });
+  });
+
+  function loadPlans() {
+    apiFetch('/api/plans').then(function (r) { return r.json(); }).then(function (rows) {
+      var tbody = document.querySelector('#plansTable tbody');
+      tbody.innerHTML = rows.map(function (p) {
+        return '<tr><td>' + esc(p.name) + '</td><td>' + p.price + ' ден</td><td>' + esc(p.period) + '</td>' +
+          '<td>' + (p.highlighted ? '<span class="pill-status">Да</span>' : '—') + '</td>' +
+          '<td><button class="link-btn danger" data-id="' + p.id + '">Избриши</button></td></tr>';
+      }).join('');
+      Array.prototype.forEach.call(tbody.querySelectorAll('button[data-id]'), function (btn) {
+        btn.addEventListener('click', function () {
+          apiFetch('/api/admin/plans/' + btn.getAttribute('data-id'), { method: 'DELETE' }).then(loadPlans);
+        });
+      });
+    });
+  }
+
+  document.getElementById('planSubmit').addEventListener('click', function () {
+    var msg = document.getElementById('planMsg');
+    var featuresRaw = document.getElementById('plFeatures').value;
+    var payload = {
+      name: document.getElementById('plName').value,
+      price: Number(document.getElementById('plPrice').value),
+      period: document.getElementById('plPeriod').value,
+      tagline: document.getElementById('plTagline').value,
+      features: featuresRaw.split(';').map(function (s) { return s.trim(); }).filter(Boolean),
+      highlighted: document.getElementById('plHighlighted').checked,
+    };
+    apiFetch('/api/admin/plans', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        msg.textContent = res.ok ? 'Пакетот е додаден.' : (res.d.error || 'Грешка.');
+        msg.className = 'form-msg ' + (res.ok ? 'ok' : 'err');
+        if (res.ok) { document.getElementById('planForm').reset(); loadPlans(); }
+      });
+  });
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ценовник — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section style="padding-bottom:0;">
+  <div class="container">
+    <span class="eyebrow">Ценовник</span>
+    <h1 class="display" style="font-size:clamp(2.4rem,5vw,3.6rem); margin-bottom:10px;">Избери го својот пакет</h1>
+    <p style="max-width:56ch;">Сите пакети вклучуваат целосен пристап до салата. Цените се во денари (МКД). Немаш обврска — можеш да смениш пакет во секое време.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="grid-3" id="plansGrid" style="align-items:stretch;">
+      <div class="skeleton-note">Се вчитуваат пакетите…</div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--panel-2); border-top:1px solid var(--border);">
+  <div class="container" style="text-align:center;">
+    <span class="eyebrow">Не си сигурен кој пакет?</span>
+    <h2 class="section-title" style="margin-bottom:16px;">Дојди на бесплатен пробен термин.</h2>
+    <a href="contact.html" class="btn btn-primary">Закажи пробен термин</a>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="layout.js"></script>
+<script>
+  fetch('/api/plans').then(function (r) { return r.json(); }).then(function (plans) {
+    var el = document.getElementById('plansGrid');
+    el.innerHTML = plans.map(function (p) {
+      return '<div class="plan-card' + (p.highlighted ? ' highlight' : '') + '">' +
+        (p.highlighted ? '<span class="ribbon">Најбарано</span>' : '') +
+        '<h3>' + Arena.esc(p.name) + '</h3>' +
+        '<p class="tagline">' + Arena.esc(p.tagline) + '</p>' +
+        '<div class="price">' + p.price + ' <span>ден / ' + Arena.esc(p.period) + '</span></div>' +
+        '<ul>' + p.features.map(function (f) { return '<li>' + Arena.esc(f) + '</li>'; }).join('') + '</ul>' +
+        '<a href="contact.html?plan=' + encodeURIComponent(p.name) + '" class="btn ' + (p.highlighted ? 'btn-primary' : 'btn-outline') + ' btn-block">Пријави се</a>' +
+        '</div>';
+    }).join('');
+  });
+</script>
+</body>
+</html>

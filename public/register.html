@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрација — Arena Fitness Prilep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section>
+  <div class="container">
+    <div class="form-card">
+      <h1 class="display" style="font-size:2rem; margin-bottom:6px;">Регистрација</h1>
+      <p style="margin-bottom:24px;">Отвори бесплатна сметка за да резервираш групни тренинзи.</p>
+      <form id="registerForm">
+        <div class="field">
+          <label for="name">Име и презиме</label>
+          <input type="text" id="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="field">
+          <label for="phone">Телефон (опционално)</label>
+          <input type="tel" id="phone">
+        </div>
+        <div class="field">
+          <label for="password">Лозинка</label>
+          <input type="password" id="password" required minlength="6">
+        </div>
+        <div class="field">
+          <label for="confirm">Потврди лозинка</label>
+          <input type="password" id="confirm" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Регистрирај се</button>
+        <p id="registerMsg" class="form-msg"></p>
+      </form>
+      <p class="form-foot">Веќе имаш сметка? <a href="login.html">Најави се</a></p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="layout.js"></script>
+<script>
+  Arena.authReady.then(function (user) {
+    if (user) window.location.href = 'account.html';
+  });
+
+  document.getElementById('registerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('registerMsg');
+    var password = document.getElementById('password').value;
+    var confirm = document.getElementById('confirm').value;
+    if (password !== confirm) {
+      msg.textContent = 'Лозинките не се совпаѓаат.';
+      msg.className = 'form-msg err';
+      return;
+    }
+    var payload = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      password: password,
+    };
+    fetch('/api/auth/register', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (res) {
+        if (res.ok) {
+          window.location.href = 'account.html';
+        } else {
+          msg.textContent = res.data.error || 'Регистрацијата не успеа.';
+          msg.className = 'form-msg err';
+        }
+      });
+  });
+</script>
+</body>
+</html>
