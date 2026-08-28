@@ -58,12 +58,14 @@ var Arena = (function () {
   // reproducing the trademarked logo artwork. The badge that wraps this
   // (.social-badge) carries the static Instagram-style gradient background;
   // the glyph itself shimmers on hover via CSS (hue-rotate, see igShimmer).
+  // Drawn in white (not a dark tone) so it reads clearly against every part
+  // of the gradient, same as the real app icon's white-on-gradient glyph.
   function instagramIconSvg() {
     return (
       '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect x="3.5" y="3.5" width="17" height="17" rx="5.5" stroke="#0c0f0a" stroke-width="1.6"/>' +
-      '<circle cx="12" cy="12" r="4.3" stroke="#0c0f0a" stroke-width="1.6"/>' +
-      '<circle cx="16.6" cy="7.4" r="1.15" fill="#0c0f0a"/>' +
+      '<rect x="2.6" y="2.6" width="18.8" height="18.8" rx="6" stroke="#ffffff" stroke-width="1.9"/>' +
+      '<circle cx="12" cy="12" r="5" stroke="#ffffff" stroke-width="1.9"/>' +
+      '<circle cx="17.1" cy="6.9" r="1.35" fill="#ffffff"/>' +
       '</svg>'
     );
   }

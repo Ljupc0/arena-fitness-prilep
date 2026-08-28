@@ -257,11 +257,11 @@ body.menu-open .mobile-menu { display: block; }
 .social-row { display: flex; align-items: center; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
 .social-row .social-label { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ink-mute); }
 .social-badge {
-  width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
+  width: 44px; height: 44px; border-radius: 30%; display: flex; align-items: center; justify-content: center; flex: none;
   background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.social-badge svg { width: 21px; height: 21px; transition: filter 0.2s; }
+.social-badge svg { width: 25px; height: 25px; transition: filter 0.2s; }
 .social-badge:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 10px 26px rgba(214,41,118,0.32); }
 .social-badge:hover svg { animation: igShimmer 1.1s linear infinite; }
 @keyframes igShimmer {

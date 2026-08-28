@@ -22,8 +22,8 @@ var I18N = (function () {
       'nav.logout': 'Одјава',
 
       'hero.eyebrow': 'Фитнес центар · Прилеп',
-      'hero.title1': 'ГРАДИ ГО',
-      'hero.title2': 'СВОЈОТ АРЕНА.',
+      'hero.title1': 'ТВОЈАТА ТРАНСФОРМАЦИЈА',
+      'hero.title2': 'ПОЧНУВА ТУКА.',
       'hero.lead': 'Тегови, кардио, групни тренинзи и простор направен да те турка понатаму секој ден. Arena Fitness Prilep е местото каде почетниците стануваат редовни, а редовните стануваат посветени.',
       'hero.ctaPrimary': 'Закажи пробен термин',
       'hero.ctaSecondary': 'Види ценовник',
@@ -179,8 +179,8 @@ var I18N = (function () {
       'nav.logout': 'Log out',
 
       'hero.eyebrow': 'Fitness center · Prilep',
-      'hero.title1': 'BUILD YOUR',
-      'hero.title2': 'OWN ARENA.',
+      'hero.title1': 'YOUR TRANSFORMATION',
+      'hero.title2': 'STARTS HERE.',
       'hero.lead': 'Weights, cardio, group training and a space built to push you further every day. Arena Fitness Prilep is where beginners become regulars, and regulars become committed.',
       'hero.ctaPrimary': 'Book a trial session',
       'hero.ctaSecondary': 'See pricing',
