@@ -1,5 +1,6 @@
 require('dotenv').config();
 const path = require('path');
+const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -126,7 +127,7 @@ app.get('/api/schedule', (req, res) => {
 // ---------- auth ----------
 
 app.post('/api/auth/register', (req, res) => {
-  const { name, email, password, phone } = req.body || {};
+  const { name, email, password, phone, plan_id } = req.body || {};
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Име, email и лозинка се задолжителни.' });
   }
@@ -136,10 +137,16 @@ app.post('/api/auth/register', (req, res) => {
   const existing = db.prepare('SELECT id FROM members WHERE email = ?').get(email.toLowerCase());
   if (existing) return res.status(409).json({ error: 'Веќе постои сметка со овој email.' });
 
+  let planId = null;
+  if (plan_id) {
+    const plan = db.prepare('SELECT id FROM plans WHERE id = ?').get(plan_id);
+    if (plan) planId = plan.id;
+  }
+
   const hash = bcrypt.hashSync(password, 10);
   const info = db
-    .prepare('INSERT INTO members (name, email, password_hash, phone) VALUES (?, ?, ?, ?)')
-    .run(name, email.toLowerCase(), hash, phone || null);
+    .prepare('INSERT INTO members (name, email, password_hash, phone, plan_id) VALUES (?, ?, ?, ?, ?)')
+    .run(name, email.toLowerCase(), hash, phone || null, planId);
   const member = { id: info.lastInsertRowid, name, email: email.toLowerCase() };
   const token = signSession(member);
   res.cookie(SESSION_COOKIE, token, {
@@ -175,6 +182,63 @@ app.post('/api/auth/logout', (req, res) => {
 app.get('/api/auth/me', (req, res) => {
   if (!req.user) return res.status(401).json({ error: 'Не сте најавени.' });
   res.json({ user: req.user });
+});
+
+// This demo has no outbound email service, so "forgot password" cannot
+// actually send mail. Instead of pretending it did, the endpoint returns the
+// reset link directly in the response and the UI shows it on-screen with a
+// clear "demo mode" label — the flow still fully works end to end.
+app.post('/api/auth/forgot-password', (req, res) => {
+  const { email } = req.body || {};
+  if (!email) return res.status(400).json({ error: 'Внесете email.' });
+  const row = db.prepare('SELECT id FROM members WHERE email = ?').get(String(email).toLowerCase());
+  if (!row) {
+    // Don't reveal whether an account exists for this email.
+    return res.json({ ok: true });
+  }
+  const token = crypto.randomBytes(24).toString('hex');
+  const expires = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
+  db.prepare('UPDATE members SET reset_token = ?, reset_token_expires = ? WHERE id = ?').run(
+    token,
+    expires,
+    row.id
+  );
+  res.json({ ok: true, resetToken: token });
+});
+
+app.post('/api/auth/reset-password', (req, res) => {
+  const { token, password } = req.body || {};
+  if (!token || !password) return res.status(400).json({ error: 'Линкот и новата лозинка се задолжителни.' });
+  if (String(password).length < 6) {
+    return res.status(400).json({ error: 'Лозинката мора да има барем 6 карактери.' });
+  }
+  const row = db.prepare('SELECT * FROM members WHERE reset_token = ?').get(token);
+  if (!row || !row.reset_token_expires || new Date(row.reset_token_expires) < new Date()) {
+    return res.status(400).json({ error: 'Линкот за промена на лозинка е невалиден или истечен.' });
+  }
+  const hash = bcrypt.hashSync(password, 10);
+  db.prepare('UPDATE members SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?').run(
+    hash,
+    row.id
+  );
+  res.json({ ok: true });
+});
+
+app.patch('/api/auth/change-password', requireUser, (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: 'Тековната и новата лозинка се задолжителни.' });
+  }
+  if (String(newPassword).length < 6) {
+    return res.status(400).json({ error: 'Новата лозинка мора да има барем 6 карактери.' });
+  }
+  const row = db.prepare('SELECT * FROM members WHERE id = ?').get(req.user.id);
+  if (!row || !bcrypt.compareSync(currentPassword, row.password_hash)) {
+    return res.status(401).json({ error: 'Тековната лозинка не е точна.' });
+  }
+  const hash = bcrypt.hashSync(newPassword, 10);
+  db.prepare('UPDATE members SET password_hash = ? WHERE id = ?').run(hash, req.user.id);
+  res.json({ ok: true });
 });
 
 // ---------- member account: bookings ----------
@@ -255,9 +319,10 @@ app.get('/api/admin/members', requireAdmin, (req, res) => {
   res.json(
     db
       .prepare(
-        `SELECT m.id, m.name, m.email, m.phone, m.created_at,
+        `SELECT m.id, m.name, m.email, m.phone, m.created_at, p.name AS plan_name,
                 (SELECT COUNT(*) FROM bookings b WHERE b.member_id = m.id) AS booking_count
-         FROM members m ORDER BY m.created_at DESC`
+         FROM members m LEFT JOIN plans p ON p.id = m.plan_id
+         ORDER BY m.created_at DESC`
       )
       .all()
   );

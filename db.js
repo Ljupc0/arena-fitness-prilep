@@ -88,6 +88,16 @@ db.exec(`
   );
 `);
 
+// Additive, non-destructive migration: add password-reset columns to an
+// existing members table without touching needsRecreate() (which would wipe
+// members/bookings/leads — far too destructive for two nullable columns).
+if (!tableHasColumn('members', 'reset_token')) {
+  db.exec('ALTER TABLE members ADD COLUMN reset_token TEXT');
+}
+if (!tableHasColumn('members', 'reset_token_expires')) {
+  db.exec('ALTER TABLE members ADD COLUMN reset_token_expires TEXT');
+}
+
 const planCount = db.prepare('SELECT COUNT(*) AS c FROM plans').get().c;
 if (planCount === 0) {
   const insertPlan = db.prepare(`
