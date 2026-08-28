@@ -39,14 +39,16 @@ var Arena = (function () {
   }
 
   // Small hand-built SVG icons (no external icon libraries / image assets).
-  // Phone: base + a separate "receiver" group so CSS can animate just the
-  // receiver on hover (see .icon-link.phone .receiver in style.css).
+  // Phone: a single bold classic-handset silhouette, filled with currentColor
+  // so it inherits the theme-aware ink/lime color set in style.css (rather
+  // than a hardcoded fill that can end up low-contrast in either theme).
+  // Wrapped in a "receiver" group purely so CSS can animate it on hover
+  // (see .icon-link.phone .receiver in style.css).
   function phoneIconSvg() {
     return (
       '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-      '<path class="cradle" d="M4 15.5C4 9.7 8.7 5 14.5 5" stroke="#b7f22a" stroke-width="1.4" stroke-linecap="round" opacity="0.35"/>' +
       '<g class="receiver">' +
-      '<path d="M6.6 3.6c.5-.3 1.1-.2 1.5.2l1.9 1.9c.4.4.5 1 .2 1.5l-.9 1.5c-.2.4-.2.9.1 1.3.9 1.1 2 2.2 3.1 3.1.4.3.9.3 1.3.1l1.5-.9c.5-.3 1.1-.2 1.5.2l1.9 1.9c.4.4.5 1.1.1 1.6-.6.8-1.5 1.5-2.5 1.6-1.8.2-4.5-.5-7.5-3.5s-3.7-5.7-3.5-7.5c.1-1 .8-1.9 1.6-2.5.1 0 .1-.1.2-.1z" fill="#b7f22a"/>' +
+      '<path d="M6.6 3.6c.5-.3 1.1-.2 1.5.2l1.9 1.9c.4.4.5 1 .2 1.5l-.9 1.5c-.2.4-.2.9.1 1.3.9 1.1 2 2.2 3.1 3.1.4.3.9.3 1.3.1l1.5-.9c.5-.3 1.1-.2 1.5.2l1.9 1.9c.4.4.5 1.1.1 1.6-.6.8-1.5 1.5-2.5 1.6-1.8.2-4.5-.5-7.5-3.5s-3.7-5.7-3.5-7.5c.1-1 .8-1.9 1.6-2.5.1 0 .1-.1.2-.1z" fill="currentColor"/>' +
       '</g>' +
       '</svg>'
     );
@@ -69,8 +71,8 @@ var Arena = (function () {
   function mailIconSvg() {
     return (
       '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5" stroke="#b7f22a" stroke-width="1.4"/>' +
-      '<path d="M4.5 7l7.5 6 7.5-6" stroke="#b7f22a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5" stroke="currentColor" stroke-width="1.6"/>' +
+      '<path d="M4.5 7l7.5 6 7.5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
       '</svg>'
     );
   }
@@ -168,6 +170,21 @@ var Arena = (function () {
     );
   }
 
+  function footerMapMarkup() {
+    var lat = info.lat || 41.3439648;
+    var lng = info.lng || 21.5517821;
+    var mapsUrl = info.mapsUrl || ('https://www.google.com/maps?q=' + lat + ',' + lng);
+    var src = 'https://www.google.com/maps?q=' + lat + ',' + lng + '&z=15&output=embed';
+    return (
+      '<div class="footer-map">' +
+      '<iframe src="' + src + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Arena Fitness Prilep — локација"></iframe>' +
+      '<a class="footer-map-link" href="' + esc(mapsUrl) + '" target="_blank" rel="noopener">' +
+      '<span>' + esc(info.address) + '</span><span>↗</span>' +
+      '</a>' +
+      '</div>'
+    );
+  }
+
   function footerMarkup() {
     var hoursHtml = info.hours
       .map(function (h) { return '<p>' + esc(h.label) + ': ' + esc(h.value) + '</p>'; })
@@ -176,14 +193,18 @@ var Arena = (function () {
       '<footer class="site">' +
       '<div class="container">' +
       '<div class="footer-grid">' +
-      '<div><h4>Arena Fitness Prilep</h4><p>' + esc(info.address) + '</p>' +
-      '<div class="footer-contact">' + phoneLink() + instagramLink() + emailLink() + '</div></div>' +
+      '<div>' +
+      '<div class="footer-brand-name">ARENA <span style="color:var(--lime)">FITNESS</span></div>' +
+      '<p>' + esc(info.address) + '</p>' +
+      '<div class="footer-contact">' + phoneLink() + instagramLink() + emailLink() + '</div>' +
+      '</div>' +
       '<div><h4>' + I18N.t('footer.hoursTitle') + '</h4>' + hoursHtml + '</div>' +
       '<div><h4>' + I18N.t('footer.linksTitle') + '</h4>' +
       '<a href="plans.html">' + I18N.t('footer.linkPlans') + '</a>' +
       '<a href="schedule.html">' + I18N.t('footer.linkSchedule') + '</a>' +
       '<a href="contact.html">' + I18N.t('footer.linkContact') + '</a>' +
       '<a href="admin.html">' + I18N.t('footer.linkAdmin') + '</a></div>' +
+      '<div><h4>' + I18N.t('footer.locationTitle') + '</h4>' + footerMapMarkup() + '</div>' +
       '</div>' +
       '<div class="footer-bottom"><span>© <span id="ftYear"></span> Arena Fitness Prilep</span><span>' + I18N.t('footer.disclaimer') + '</span></div>' +
       '</div>' +

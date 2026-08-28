@@ -92,6 +92,7 @@ var I18N = (function () {
       'footer.linkSchedule': 'Распоред на тренинзи',
       'footer.linkContact': 'Закажи пробен термин',
       'footer.linkAdmin': 'Admin',
+      'footer.locationTitle': 'Локација',
       'footer.disclaimer': 'Демо/портфолио страница — не е официјална страница на Arena Fitness Prilep',
 
       'plans.eyebrow': 'Ценовник',
@@ -243,6 +244,7 @@ var I18N = (function () {
       'footer.linkSchedule': 'Class schedule',
       'footer.linkContact': 'Book a trial session',
       'footer.linkAdmin': 'Admin',
+      'footer.locationTitle': 'Location',
       'footer.disclaimer': 'Demo / portfolio page — not the official website of Arena Fitness Prilep',
 
       'plans.eyebrow': 'Pricing',
