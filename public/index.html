@@ -36,44 +36,10 @@
       </div>
     </div>
     <div class="hero-visual hero-fade d2">
-      <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#1b2114"/>
-            <stop offset="100%" stop-color="#0c0f0a"/>
-          </linearGradient>
-          <radialGradient id="glow" cx="70%" cy="20%" r="60%">
-            <stop offset="0%" stop-color="#b7f22a" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#b7f22a" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="glow2" cx="15%" cy="90%" r="55%">
-            <stop offset="0%" stop-color="#33d2ff" stop-opacity="0.28"/>
-            <stop offset="100%" stop-color="#33d2ff" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="400" height="500" fill="url(#g1)"/>
-        <rect width="400" height="500" fill="url(#glow)"/>
-        <rect width="400" height="500" fill="url(#glow2)"/>
-        <g stroke="#2a331b" stroke-width="1">
-          <line x1="0" y1="120" x2="400" y2="120"/>
-          <line x1="0" y1="260" x2="400" y2="260"/>
-          <line x1="0" y1="400" x2="400" y2="400"/>
-        </g>
-        <!-- barbell -->
-        <g transform="translate(60,230) rotate(-8)">
-          <rect x="0" y="18" width="260" height="10" rx="3" fill="#3a4527"/>
-          <rect x="-14" y="0" width="26" height="46" rx="4" fill="#b7f22a"/>
-          <rect x="248" y="0" width="26" height="46" rx="4" fill="#b7f22a"/>
-          <rect x="-24" y="8" width="14" height="30" rx="3" fill="#8fc21c"/>
-          <rect x="270" y="8" width="14" height="30" rx="3" fill="#8fc21c"/>
-        </g>
-        <!-- dumbbell silhouette -->
-        <g transform="translate(230,340)">
-          <circle cx="0" cy="0" r="34" fill="none" stroke="#33d2ff" stroke-width="2" opacity="0.7"/>
-          <circle cx="0" cy="0" r="8" fill="#33d2ff" opacity="0.9"/>
-        </g>
-        <text x="30" y="450" font-family="Bebas Neue" font-size="34" fill="#f3f6ec" opacity="0.9">NO EXCUSES</text>
-      </svg>
+      <video class="hero-video" autoplay muted loop playsinline poster="media/hero-poster.jpg">
+        <source src="media/hero.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-scrim"></div>
       <span class="badge-pill" data-i18n="hero.badge">Отвораме секој ден · Пон–Саб</span>
     </div>
   </div>
@@ -145,15 +111,15 @@
       <button class="post-tab" data-cat="transformations" data-i18n="posts.tabTransformations">Трансформации</button>
     </div>
     <div class="post-grid" id="postGrid">
-      <div class="post-card cat-food show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🍗</div><div class="post-body"><h4 data-i18n="posts.p1Title">Оброк по тренинг</h4><p data-i18n="posts.p1Body">Протеини + сложени јаглехидрати во првите 60 минути по тренингот.</p></div></div>
-      <div class="post-card cat-food show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🥗</div><div class="post-body"><h4 data-i18n="posts.p2Title">Мисирано на скара</h4><p data-i18n="posts.p2Body">Лесен, богат со протеини оброк идеален за ден со тренинг за сила.</p></div></div>
-      <div class="post-card cat-food show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🥣</div><div class="post-body"><h4 data-i18n="posts.p3Title">Овесна каша наутро</h4><p data-i18n="posts.p3Body">Стабилна енергија за утринските термини на функционален тренинг.</p></div></div>
-      <div class="post-card cat-supplements show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>🥤</div><div class="post-body"><h4 data-i18n="posts.p4Title">Протеини во прав</h4><p data-i18n="posts.p4Body">Кога да користиш суплемент, а кога оброкот е доволен — прашај го тренерот.</p></div></div>
-      <div class="post-card cat-supplements show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>💊</div><div class="post-body"><h4 data-i18n="posts.p5Title">Креатин — основи</h4><p data-i18n="posts.p5Body">Еден од најистражуваните суплементи за сила и издржливост.</p></div></div>
-      <div class="post-card cat-supplements show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>💧</div><div class="post-body"><h4 data-i18n="posts.p6Title">Хидратација</h4><p data-i18n="posts.p6Body">Вода и електролити пред и по интензивен тренинг во салата.</p></div></div>
-      <div class="post-card cat-transformations show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>📈</div><div class="post-body"><h4 data-i18n="posts.p7Title">3 месеци подоцна</h4><p data-i18n="posts.p7Body">Редовност и прогресивно оптоварување — тоа е целата тајна.</p></div></div>
-      <div class="post-card cat-transformations show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>🏁</div><div class="post-body"><h4 data-i18n="posts.p8Title">Прв натпревар</h4><p data-i18n="posts.p8Body">Од прв пробен термин до прва трка — приказна на наш член.</p></div></div>
-      <div class="post-card cat-transformations show"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>🏆</div><div class="post-body"><h4 data-i18n="posts.p9Title">Годишен напредок</h4><p data-i18n="posts.p9Body">Пример за тоа што носи една година доследни тренинзи.</p></div></div>
+      <div class="post-card openable cat-food show" data-post="1"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🍗</div><div class="post-body"><h4 data-i18n="posts.p1Title">Оброк по тренинг</h4><p data-i18n="posts.p1Body">Протеини + сложени јаглехидрати во првите 60 минути по тренингот.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-food show" data-post="2"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🥗</div><div class="post-body"><h4 data-i18n="posts.p2Title">Мисирано на скара</h4><p data-i18n="posts.p2Body">Лесен, богат со протеини оброк идеален за ден со тренинг за сила.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-food show" data-post="3"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabFood">Храна</span>🥣</div><div class="post-body"><h4 data-i18n="posts.p3Title">Овесна каша наутро</h4><p data-i18n="posts.p3Body">Стабилна енергија за утринските термини на функционален тренинг.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-supplements show" data-post="4"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>🥤</div><div class="post-body"><h4 data-i18n="posts.p4Title">Протеини во прав</h4><p data-i18n="posts.p4Body">Кога да користиш суплемент, а кога оброкот е доволен — прашај го тренерот.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-supplements show" data-post="5"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>💊</div><div class="post-body"><h4 data-i18n="posts.p5Title">Креатин — основи</h4><p data-i18n="posts.p5Body">Еден од најистражуваните суплементи за сила и издржливост.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-supplements show" data-post="6"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabSupplements">Суплементи</span>💧</div><div class="post-body"><h4 data-i18n="posts.p6Title">Хидратација</h4><p data-i18n="posts.p6Body">Вода и електролити пред и по интензивен тренинг во салата.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-transformations show" data-post="7"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>📈</div><div class="post-body"><h4 data-i18n="posts.p7Title">3 месеци подоцна</h4><p data-i18n="posts.p7Body">Редовност и прогресивно оптоварување — тоа е целата тајна.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-transformations show" data-post="8"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>🏁</div><div class="post-body"><h4 data-i18n="posts.p8Title">Прв натпревар</h4><p data-i18n="posts.p8Body">Од прв пробен термин до прва трка — приказна на наш член.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
+      <div class="post-card openable cat-transformations show" data-post="9"><div class="thumb"><span class="cat-badge" data-i18n="posts.tabTransformations">Трансформации</span>🏆</div><div class="post-body"><h4 data-i18n="posts.p9Title">Годишен напредок</h4><p data-i18n="posts.p9Body">Пример за тоа што носи една година доследни тренинзи.</p><span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span></div></div>
     </div>
   </div>
 </section>
@@ -206,6 +172,19 @@
       Array.prototype.forEach.call(cards, function (c) {
         c.classList.toggle('show', cat === 'all' || c.classList.contains('cat-' + cat));
       });
+    });
+
+    var eyebrowKey = { food: 'posts.tabFood', supplements: 'posts.tabSupplements', transformations: 'posts.tabTransformations' };
+    document.getElementById('postGrid').addEventListener('click', function (e) {
+      var card = e.target.closest('.post-card');
+      if (!card) return;
+      var n = card.getAttribute('data-post');
+      var cat = card.className.match(/cat-(food|supplements|transformations)/);
+      Arena.openModal(
+        cat ? I18N.t(eyebrowKey[cat[1]]) : '',
+        I18N.t('posts.p' + n + 'Title'),
+        '<p>' + Arena.esc(I18N.t('posts.p' + n + 'Detail')) + '</p>'
+      );
     });
   })();
 </script>

@@ -31,6 +31,12 @@
           <input type="tel" id="phone">
         </div>
         <div class="field">
+          <label for="plan">Пакет за членство (опционално)</label>
+          <select id="plan">
+            <option value="">Ќе одлучам подоцна</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="password">Лозинка</label>
           <input type="password" id="password" required minlength="6">
         </div>
@@ -54,6 +60,16 @@
     if (user) window.location.href = 'account.html';
   });
 
+  fetch('/api/plans').then(function (r) { return r.json(); }).then(function (plans) {
+    var sel = document.getElementById('plan');
+    plans.forEach(function (p) {
+      var opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name + ' — ' + p.price + ' ден / ' + p.period;
+      sel.appendChild(opt);
+    });
+  });
+
   document.getElementById('registerForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var msg = document.getElementById('registerMsg');
@@ -68,6 +84,7 @@
       name: document.getElementById('name').value.trim(),
       email: document.getElementById('email').value.trim(),
       phone: document.getElementById('phone').value.trim(),
+      plan_id: document.getElementById('plan').value || null,
       password: password,
     };
     fetch('/api/auth/register', {

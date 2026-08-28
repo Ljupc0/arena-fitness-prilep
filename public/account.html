@@ -31,6 +31,31 @@
       <a href="schedule.html" class="btn btn-primary">+ Резервирај нов термин</a>
     </div>
     <div id="bookingsList"><div class="skeleton-note">Се вчитуваат резервациите…</div></div>
+
+    <div class="section-head" style="margin-top:48px;">
+      <div>
+        <span class="eyebrow">Безбедност</span>
+        <h2 class="section-title" style="font-size:1.6rem;">Смени лозинка</h2>
+      </div>
+    </div>
+    <div class="form-card" style="margin:0;">
+      <form id="changePasswordForm">
+        <div class="field">
+          <label for="currentPassword">Тековна лозинка</label>
+          <input type="password" id="currentPassword" required>
+        </div>
+        <div class="field">
+          <label for="newPassword">Нова лозинка</label>
+          <input type="password" id="newPassword" required minlength="6">
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Потврди нова лозинка</label>
+          <input type="password" id="confirmPassword" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Смени лозинка</button>
+        <p id="changePasswordMsg" class="form-msg"></p>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -74,6 +99,37 @@
   }
 
   document.getElementById('signOutBtn').addEventListener('click', Arena.logout);
+
+  document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('changePasswordMsg');
+    var newPassword = document.getElementById('newPassword').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+    if (newPassword !== confirmPassword) {
+      msg.textContent = 'Новите лозинки не се совпаѓаат.';
+      msg.className = 'form-msg err';
+      return;
+    }
+    fetch('/api/auth/change-password', {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        currentPassword: document.getElementById('currentPassword').value,
+        newPassword: newPassword,
+      }),
+    }).then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (res) {
+        if (res.ok) {
+          msg.textContent = 'Лозинката е успешно сменета.';
+          msg.className = 'form-msg ok';
+          document.getElementById('changePasswordForm').reset();
+        } else {
+          msg.textContent = res.data.error || 'Настана грешка.';
+          msg.className = 'form-msg err';
+        }
+      });
+  });
 </script>
 </body>
 </html>

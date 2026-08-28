@@ -59,7 +59,7 @@
 
     <div class="tab-panel" data-panel="members" style="display:none;">
       <div class="table-wrap"><table class="data-table" id="membersTable">
-        <thead><tr><th>Име</th><th>Email</th><th>Телефон</th><th>Резервации</th><th>Регистриран</th></tr></thead>
+        <thead><tr><th>Име</th><th>Email</th><th>Телефон</th><th>Пакет</th><th>Резервации</th><th>Регистриран</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -200,8 +200,9 @@
       var tbody = document.querySelector('#membersTable tbody');
       tbody.innerHTML = rows.map(function (m) {
         return '<tr><td>' + esc(m.name) + '</td><td>' + esc(m.email) + '</td><td>' + esc(m.phone || '—') + '</td>' +
+          '<td>' + esc(m.plan_name || '—') + '</td>' +
           '<td>' + m.booking_count + '</td><td>' + esc(m.created_at) + '</td></tr>';
-      }).join('') || '<tr><td colspan="5" style="text-align:center; color:var(--ink-mute);">Нема регистрирани members сеуште.</td></tr>';
+      }).join('') || '<tr><td colspan="6" style="text-align:center; color:var(--ink-mute);">Нема регистрирани members сеуште.</td></tr>';
     });
   }
 

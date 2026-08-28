@@ -56,16 +56,25 @@ var Arena = (function () {
 
   // A generic "camera in a rounded square" glyph evoking Instagram without
   // reproducing the trademarked logo artwork. The badge that wraps this
-  // (.social-badge) carries the static Instagram-style gradient background;
-  // the glyph itself shimmers on hover via CSS (hue-rotate, see igShimmer).
-  // Drawn in white (not a dark tone) so it reads clearly against every part
-  // of the gradient, same as the real app icon's white-on-gradient glyph.
+  // (.social-badge) has no fill of its own — it sits flush on the footer's
+  // own dark background — so the glyph itself carries the Instagram brand
+  // gradient (via an inline <linearGradient>, unique id per instance so two
+  // badges can appear on the same page, e.g. footer + contact.html card).
+  var _igGradSeq = 0;
   function instagramIconSvg() {
+    var gid = 'igGrad' + (_igGradSeq++);
     return (
       '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect x="2.6" y="2.6" width="18.8" height="18.8" rx="6" stroke="#ffffff" stroke-width="1.9"/>' +
-      '<circle cx="12" cy="12" r="5" stroke="#ffffff" stroke-width="1.9"/>' +
-      '<circle cx="17.1" cy="6.9" r="1.35" fill="#ffffff"/>' +
+      '<defs><linearGradient id="' + gid + '" x1="2" y1="21" x2="21" y2="2" gradientUnits="userSpaceOnUse">' +
+      '<stop offset="0" stop-color="#feda75"/>' +
+      '<stop offset="0.3" stop-color="#fa7e1e"/>' +
+      '<stop offset="0.55" stop-color="#d62976"/>' +
+      '<stop offset="0.78" stop-color="#962fbf"/>' +
+      '<stop offset="1" stop-color="#4f5bd5"/>' +
+      '</linearGradient></defs>' +
+      '<rect x="2.6" y="2.6" width="18.8" height="18.8" rx="6" stroke="url(#' + gid + ')" stroke-width="2"/>' +
+      '<circle cx="12" cy="12" r="5" stroke="url(#' + gid + ')" stroke-width="2"/>' +
+      '<circle cx="17.1" cy="6.9" r="1.35" fill="url(#' + gid + ')"/>' +
       '</svg>'
     );
   }
@@ -143,7 +152,7 @@ var Arena = (function () {
   function headerMarkup() {
     var path = window.location.pathname.split('/').pop() || 'index.html';
     function navLink(href, label) {
-      var active = path === href ? ' active' : '';
+      var active = path === href.split('#')[0] ? ' active' : '';
       return '<a href="' + href + '" class="' + active.trim() + '">' + label + '</a>';
     }
     var accountBlock = auth
@@ -159,7 +168,7 @@ var Arena = (function () {
       navLink('plans.html', I18N.t('nav.plans')) +
       navLink('trainers.html', I18N.t('nav.trainers')) +
       navLink('about.html', I18N.t('nav.about')) +
-      navLink('contact.html', I18N.t('nav.contact')) +
+      navLink('contact.html#contactFormSection', I18N.t('nav.contact')) +
       '</nav>' +
       '<div class="nav-actions">' +
       langToggleMarkup(false) +
@@ -187,7 +196,7 @@ var Arena = (function () {
       '<a href="plans.html" class="plain-link">' + I18N.t('nav.plans') + '</a>' +
       '<a href="trainers.html" class="plain-link">' + I18N.t('nav.trainers') + '</a>' +
       '<a href="about.html" class="plain-link">' + I18N.t('nav.about') + '</a>' +
-      '<a href="contact.html" class="plain-link">' + I18N.t('nav.contact') + '</a>' +
+      '<a href="contact.html#contactFormSection" class="plain-link">' + I18N.t('nav.contact') + '</a>' +
       accountLinks +
       langToggleMarkup(true) +
       '</div>' +
@@ -228,7 +237,7 @@ var Arena = (function () {
       '<div><h4>' + I18N.t('footer.linksTitle') + '</h4>' +
       '<a href="plans.html">' + I18N.t('footer.linkPlans') + '</a>' +
       '<a href="schedule.html">' + I18N.t('footer.linkSchedule') + '</a>' +
-      '<a href="contact.html">' + I18N.t('footer.linkContact') + '</a>' +
+      '<a href="contact.html#contactFormSection">' + I18N.t('footer.linkContact') + '</a>' +
       '<a href="admin.html">' + I18N.t('footer.linkAdmin') + '</a></div>' +
       '<div><h4>' + I18N.t('footer.locationTitle') + '</h4>' + footerMapMarkup() + '</div>' +
       '</div>' +
@@ -271,6 +280,45 @@ var Arena = (function () {
     wireEvents();
   }
 
+  // Shared read-more modal — used by index.html (food/supplements/
+  // transformations post cards) and trainers.html (trainer bio cards) so
+  // those cards can be "opened" for a longer read instead of only showing
+  // the short teaser text on the card itself.
+  function ensureModalEl() {
+    var el = document.getElementById('arenaModal');
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = 'arenaModal';
+    el.className = 'modal-overlay';
+    el.innerHTML =
+      '<div class="modal-box" role="dialog" aria-modal="true">' +
+      '<button class="modal-close" type="button" aria-label="Затвори">&times;</button>' +
+      '<div class="modal-eyebrow" id="arenaModalEyebrow"></div>' +
+      '<h3 class="modal-title" id="arenaModalTitle"></h3>' +
+      '<div class="modal-body" id="arenaModalBody"></div>' +
+      '</div>';
+    document.body.appendChild(el);
+    el.addEventListener('click', function (e) { if (e.target === el) closeModal(); });
+    el.querySelector('.modal-close').addEventListener('click', closeModal);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    return el;
+  }
+
+  function openModal(eyebrow, title, bodyHtml) {
+    var el = ensureModalEl();
+    document.getElementById('arenaModalEyebrow').textContent = eyebrow || '';
+    document.getElementById('arenaModalTitle').textContent = title || '';
+    document.getElementById('arenaModalBody').innerHTML = bodyHtml || '';
+    el.classList.add('open');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeModal() {
+    var el = document.getElementById('arenaModal');
+    if (el) el.classList.remove('open');
+    document.body.classList.remove('modal-open');
+  }
+
   function mount() {
     render();
     Promise.all([infoReady, authReady]).then(render);
@@ -301,5 +349,7 @@ var Arena = (function () {
     phoneLink: phoneLink,
     emailLink: emailLink,
     instagramBadge: instagramBadge,
+    openModal: openModal,
+    closeModal: closeModal,
   };
 })();

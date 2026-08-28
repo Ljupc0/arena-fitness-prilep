@@ -24,29 +24,33 @@
 <section>
   <div class="container">
     <div class="grid-4">
-      <div class="trainer-card">
+      <div class="trainer-card openable" data-role="1">
         <div class="trainer-avatar">🏋️</div>
         <h3 data-i18n="trainers.role1Name">Главен тренер</h3>
         <span class="role" data-i18n="trainers.role1Title">Функционален тренинг & Сила</span>
         <p data-i18n="trainers.role1Body">Ги води програмите за сила и функционален тренинг и почетната проценка на нови members.</p>
+        <span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span>
       </div>
-      <div class="trainer-card">
+      <div class="trainer-card openable" data-role="2">
         <div class="trainer-avatar">🔥</div>
         <h3 data-i18n="trainers.role2Name">Тренер за групни програми</h3>
         <span class="role" data-i18n="trainers.role2Title">HIIT, Зумба & Спининг</span>
         <p data-i18n="trainers.role2Body">Води енергични групни часови направени за издржливост и кардио форма.</p>
+        <span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span>
       </div>
-      <div class="trainer-card">
+      <div class="trainer-card openable" data-role="3">
         <div class="trainer-avatar">🧘</div>
         <h3 data-i18n="trainers.role3Name">Тренер за мобилност</h3>
         <span class="role" data-i18n="trainers.role3Title">Јога & Пилатес</span>
         <p data-i18n="trainers.role3Body">Фокус на баланс, флексибилност и опоравување помеѓу интензивни тренинзи.</p>
+        <span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span>
       </div>
-      <div class="trainer-card">
+      <div class="trainer-card openable" data-role="4">
         <div class="trainer-avatar">🎯</div>
         <h3 data-i18n="trainers.role4Name">Персонален тренер</h3>
         <span class="role" data-i18n="trainers.role4Title">Индивидуални програми</span>
         <p data-i18n="trainers.role4Body">Прилагодени планови за тренинг и следење на напредокот за секој член.</p>
+        <span class="read-more-hint" data-i18n="posts.readMore">Прочитај повеќе →</span>
       </div>
     </div>
     <p class="trainer-note" data-i18n="trainers.note">Улогите погоре се илустративен приказ на структурата на тимот за целите на оваа демо/портфолио страница, а не листа на конкретни вработени.</p>
@@ -64,5 +68,17 @@
 <div id="site-footer"></div>
 <script src="i18n.js"></script>
 <script src="layout.js"></script>
+<script>
+  document.querySelector('.grid-4').addEventListener('click', function (e) {
+    var card = e.target.closest('.trainer-card');
+    if (!card) return;
+    var n = card.getAttribute('data-role');
+    Arena.openModal(
+      I18N.t('trainers.role' + n + 'Title'),
+      I18N.t('trainers.role' + n + 'Name'),
+      '<p>' + Arena.esc(I18N.t('trainers.role' + n + 'Detail')) + '</p>'
+    );
+  });
+</script>
 </body>
 </html>
